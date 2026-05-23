@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: smartHire.api
+
+  datasource:
+    url: jdbc:postgresql://localhost:5433/smarthire
+    username: postgres
+    password: amir2026
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
