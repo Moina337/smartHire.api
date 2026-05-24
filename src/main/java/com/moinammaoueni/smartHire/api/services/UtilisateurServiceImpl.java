@@ -32,26 +32,42 @@ public class UtilisateurServiceImpl implements UtilisateurService, UserDetailsSe
 	private final PasswordEncoder encoder;
 
 	private final JwtService jwtService;
+	
+	
 
 	@Override
-	public void register(RegisterRequest request) {
+	public AuthResponse register(RegisterRequest request) {
 
-		// 1. check email
-		if (utilisateurRepository.existsByEmail(request.getEmail())) {
+	    // 1. vérifier email
+	    if (utilisateurRepository.existsByEmail(request.getEmail())) {
+	        throw new UserAlreadyExistsException("Email déjà utilisé");
+	    }
 
-			throw new UserAlreadyExistsException("Email déjà utilisé");
+	    // 2. créer user
+	    Utilisateur utilisateur = Utilisateur.builder()
+	            .nom(request.getNom())
+	            .email(request.getEmail())
+	            .password(encoder.encode(request.getPassword()))
+	            .role(Role.CANDIDAT)
+	            .build();
 
-		}
+	    // 3. save
+	    Utilisateur savedUser =
+	            utilisateurRepository.save(utilisateur);
 
-		System.out.println(request.getPassword());
+	    // 4. claims JWT
+	    Map<String, Object> claims = new HashMap<>();
+	    claims.put("role", savedUser.getRole().name());
+	    claims.put("userId", savedUser.getId());
 
-		// 2. create user
-		Utilisateur utilisateur = Utilisateur.builder().nom(request.getNom()).email(request.getEmail())
-				.password(encoder.encode(request.getPassword())).role(Role.CANDIDAT).build();
+	    // 5. token
+	    String token =
+	            jwtService.generateToken(
+	                    claims,
+	                    savedUser.getEmail());
 
-		// 3. save
-		utilisateurRepository.save(utilisateur);
-
+	    // 6. return
+	    return AuthResponse.builder().token(token).build();
 	}
 
 	@Override

@@ -25,15 +25,12 @@ public class AuthController {
     private final UtilisateurService utilisateurService;
 
     @PostMapping("/register")
-    public ResponseEntity<Void> inscription(
-            @RequestBody RegisterRequest request
-    ) {
-
-        utilisateurService.register(request);
+    public ResponseEntity<AuthResponse>
+    inscription(@Valid @RequestBody RegisterRequest request) {
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .build();
+                .body(utilisateurService.register(request));
     }
     
     @PostMapping("/login")

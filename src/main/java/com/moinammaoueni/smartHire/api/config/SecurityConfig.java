@@ -2,33 +2,44 @@ package com.moinammaoueni.smartHire.api.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import lombok.RequiredArgsConstructor;
 
 @Configuration
+@RequiredArgsConstructor
 public class SecurityConfig {
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+	private final JwtFilter jwtFilter;
 
-        http
-            .csrf(csrf -> csrf.disable())
+	@Bean
+	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers(
-                    "/swagger-ui/**",
-                    "/swagger-ui.html",
-                    "/v3/api-docs/**",
-                    "/v3/api-docs",
-                    "/api-docs/**"
-                ).permitAll()
+		http.csrf(csrf -> csrf.disable())
 
-                .anyRequest().permitAll()
-            )
+				// JWT = stateless
+				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
-            .httpBasic(Customizer.withDefaults());
+				.authorizeHttpRequests(auth -> auth
 
-        return http.build();
-    }
+						// Swagger
+						.requestMatchers("/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**").permitAll()
+
+						// Auth public
+						.requestMatchers("/api/auth/**").permitAll()
+
+						// Candidate
+						.requestMatchers("/api/candidate/**").hasRole("CANDIDAT")
+
+						// autres routes
+						.anyRequest().authenticated())
+
+				// JWT FILTER ICI
+				.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+
+		return http.build();
+	}
 }
