@@ -5,10 +5,13 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5433/smarthire
     username: postgres
-    password: amir2026
+    password: password
 
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: true
 
+jwt:
+  secret: "dev-secret-key-dev-secret-key-dev-secret-key-dev-secret-key-123456"
+  expiration: 86400000

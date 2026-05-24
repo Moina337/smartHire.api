@@ -18,11 +18,14 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 
 
 @RestController
 @RequestMapping("/api/admin/jobs")
 @SecurityRequirement(name = "bearerAuth")
+@RequiredArgsConstructor
 @Tag(
     name = "ADMIN JOBS",
     description = "Administration des offres d'emploi"
@@ -36,9 +39,6 @@ public class AdminJobController {
 	
 	 private final JobService jobService;
 
-	 public AdminJobController(JobService jobService) {
-		 this.jobService = jobService;
-	 }
 	
 	@PostMapping
     @Operation(
@@ -49,7 +49,7 @@ public class AdminJobController {
         @ApiResponse(responseCode = "201", description = "Offre créée avec succès"),
         @ApiResponse(responseCode = "400", description = "Données invalides")
     })
-    public JobResponse create(@RequestBody JobRequest request) {
+    public JobResponse create(@Valid @RequestBody JobRequest request) {
         return jobService.creerUnJob(request);
     }
 

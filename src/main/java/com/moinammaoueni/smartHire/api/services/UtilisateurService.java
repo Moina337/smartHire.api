@@ -1,5 +1,14 @@
 package com.moinammaoueni.smartHire.api.services;
 
-public class UtilisateurService {
+
+import com.moinammaoueni.smartHire.api.dto.AuthResponse;
+import com.moinammaoueni.smartHire.api.dto.LoginRequest;
+import com.moinammaoueni.smartHire.api.dto.RegisterRequest;
+
+public interface UtilisateurService {
+	
+	void register(RegisterRequest request);
+	
+	AuthResponse connection(LoginRequest request);
 
 }
