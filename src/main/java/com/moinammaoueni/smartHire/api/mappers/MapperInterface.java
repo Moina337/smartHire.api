@@ -3,6 +3,7 @@ package com.moinammaoueni.smartHire.api.mappers;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
+import com.moinammaoueni.smartHire.api.config.AppProperties;
 import com.moinammaoueni.smartHire.api.dto.CandidateRequest;
 import com.moinammaoueni.smartHire.api.dto.CandidateResponse;
 import com.moinammaoueni.smartHire.api.dto.DetailCandidatResponse;
@@ -13,8 +14,11 @@ import com.moinammaoueni.smartHire.api.entity.Candidate;
 import com.moinammaoueni.smartHire.api.entity.Job;
 import com.moinammaoueni.smartHire.api.entity.Utilisateur;
 
+import lombok.RequiredArgsConstructor;
+
 @Mapper(componentModel = "spring")
 public interface MapperInterface {
+	
 	
 	Job jobRequestToJob(JobRequest jobRequest);
 	

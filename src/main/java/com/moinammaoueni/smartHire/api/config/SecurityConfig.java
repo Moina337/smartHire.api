@@ -33,7 +33,11 @@ public class SecurityConfig {
 
 						// Candidate
 						.requestMatchers("/api/candidate/**").hasRole("CANDIDAT")
-
+						
+						.requestMatchers("/api/admin/jobs").hasRole("ADMIN")	
+						
+						.requestMatchers("/api/admin/candidates").hasRole("ADMIN")
+						
 						// autres routes
 						.anyRequest().authenticated())
 

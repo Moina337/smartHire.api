@@ -60,5 +60,21 @@ public class GlobalExceptionHandler {
 
 	    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
 	}
+	
+	@ExceptionHandler(CandidatNotFoundException.class)
+	public ResponseEntity<ErrorResponse>
+	handleCandidatNotFound(CandidatNotFoundException ex) {
+
+	    ErrorResponse error =
+	            ErrorResponse.builder()
+	                    .message(ex.getMessage())
+	                    .status(HttpStatus.NOT_FOUND.value())
+	                    .timestamp(LocalDateTime.now())
+	                    .build();
+
+	    return ResponseEntity
+	            .status(HttpStatus.NOT_FOUND)
+	            .body(error);
+	}
 
 }
