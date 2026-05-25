@@ -110,34 +110,60 @@ public class CandidatServiceImpl implements CandidatService {
 	@Override
 	public DetailCandidatResponse uploadCv(MultipartFile file) {
 
-		// 1. validation
-		if (file == null || file.isEmpty()) {
-			throw new RuntimeException("CV obligatoire");
-		}
+	    // 1. validation
+	    if (file == null || file.isEmpty()) {
+	        throw new RuntimeException("CV obligatoire");
+	    }
 
-		// 2. utilisateur connecté
-		Long userId = currentUser.getId();
+	    // validation PDF
+	    if (!"application/pdf".equals(file.getContentType())) {
+	        throw new RuntimeException("Le CV doit être un fichier PDF");
+	    }
 
-		// 3. récupérer candidat
-		Candidate candidat = candidatRepository.findByUtilisateurId(userId)
-				.orElseThrow(() -> new CandidatNotFoundException("Profil candidat introuvable"));
+	    // validation taille 5MB
+	    if (file.getSize() > 5 * 1024 * 1024) {
+	        throw new RuntimeException("Le fichier dépasse 5MB");
+	    }
 
-		// 4. supprimer ancien CV si existe
-		if (candidat.getCvUrl() != null && !candidat.getCvUrl().isBlank()) {
+	    // 2. utilisateur connecté
+	    Long userId = currentUser.getId();
 
-			fileStorageService.delete(candidat.getCvUrl());
-		}
+	    // 3. récupérer candidat
+	    Candidate candidat =
+	            candidatRepository.findByUtilisateurId(userId)
+	            .orElseThrow(() ->
+	                    new CandidatNotFoundException(
+	                            "Profil candidat introuvable"));
 
-		// 5. sauvegarder nouveau CV
-		String fileName = fileStorageService.save(file);
+	    // 4. supprimer ancien CV
+	    if (candidat.getCvUrl() != null
+	            && !candidat.getCvUrl().isBlank()) {
 
-		// 6. update DB
-		candidat.setCvUrl(fileName);
+	        fileStorageService.delete(
+	                candidat.getCvUrl()
+	        );
+	    }
 
-		Candidate saved = candidatRepository.save(candidat);
+	    // 5. sauvegarder nouveau CV
+	    String fileName =
+	            fileStorageService.save(file);
 
-		// 7. return response
-		return mapperInterface.candidatToDetailCandidat(saved);
+	    // 6. update DB
+	    candidat.setCvUrl(fileName);
+
+	    Candidate saved =
+	            candidatRepository.save(candidat);
+
+	    // 7. mapping response
+	    DetailCandidatResponse response =
+	            mapperInterface.candidatToDetailCandidat(saved);
+
+	    response.setCvUrl(
+	            fileStorageService.getUrl(
+	                    saved.getCvUrl()
+	            )
+	    );
+
+	    return response;
 	}
-
 }

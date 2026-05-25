@@ -9,57 +9,76 @@ import java.util.UUID;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.moinammaoueni.smartHire.api.config.AppProperties;
+
+import lombok.RequiredArgsConstructor;
+
 @Service
-public class LocalFileStorageService implements FileStorageService {
+@RequiredArgsConstructor
+public class LocalFileStorageService
+        implements FileStorageService {
 
-	@Override
-	public String save(MultipartFile file) {
+    private final AppProperties appProperties;
 
-	    try {
+    private final Path uploadPath =
+            Paths.get("uploads").toAbsolutePath();
 
-	        Path uploadPath =
-	                Paths.get("uploads").toAbsolutePath();
+    @Override
+    public String save(MultipartFile file) {
 
-	        Files.createDirectories(uploadPath);
+        try {
 
-	        String fileName =
-	                UUID.randomUUID()
-	                + "_"
-	                + file.getOriginalFilename()
-	                        .replace(" ", "_");
+            Files.createDirectories(uploadPath);
 
-	        Path filePath =
-	                uploadPath.resolve(fileName);
+            String fileName =
+                    UUID.randomUUID()
+                    + "_"
+                    + file.getOriginalFilename()
+                            .replace(" ", "_");
 
-	        Files.copy(file.getInputStream(), filePath);
+            Path filePath =
+                    uploadPath.resolve(fileName);
 
-	        return fileName; // ✔ uniquement le nom
+            Files.copy(
+                    file.getInputStream(),
+                    filePath
+            );
 
-	    } catch (IOException e) {
-	        throw new RuntimeException(
-	                "Erreur upload fichier", e);
-	    }
-	}
-	
-	
-	@Override
-	public void delete(String fileName) {
+            return fileName;
 
-	    try {
+        } catch (IOException e) {
 
-	        Path uploadPath =
-	                Paths.get("uploads").toAbsolutePath();
+            throw new RuntimeException(
+                    "Erreur upload fichier", e);
+        }
+    }
 
-	        Path filePath =
-	                uploadPath.resolve(fileName);
+    @Override
+    public void delete(String fileName) {
 
-	        Files.deleteIfExists(filePath);
+        try {
 
-	    } catch (IOException e) {
-	        throw new RuntimeException(
-	                "Erreur suppression fichier", e);
-	    }
-	}
-	
-	
+            Path filePath =
+                    uploadPath.resolve(fileName);
+
+            Files.deleteIfExists(filePath);
+
+        } catch (IOException e) {
+
+            throw new RuntimeException(
+                    "Erreur suppression fichier", e);
+        }
+    }
+
+    @Override
+    public String getUrl(String fileName) {
+
+        if (fileName == null) {
+            return null;
+        }
+
+        return appProperties.getFileBaseUrl()
+                + "/"
+                + fileName;
+    }
 }

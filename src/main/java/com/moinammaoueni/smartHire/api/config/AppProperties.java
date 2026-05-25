@@ -11,5 +11,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class AppProperties {
-    private String baseUrl;
+
+    private String fileBaseUrl;
 }

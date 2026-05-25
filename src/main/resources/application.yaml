@@ -9,9 +9,12 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     show-sql: true
 
 jwt:
   secret: "dev-secret-key-dev-secret-key-dev-secret-key-dev-secret-key-123456"
   expiration: 86400000
+  
+app:
+  file-base-url: http://localhost:8080/uploads  
