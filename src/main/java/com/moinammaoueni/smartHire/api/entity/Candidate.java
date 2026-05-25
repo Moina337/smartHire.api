@@ -11,6 +11,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -41,4 +42,7 @@ public class Candidate {
 
     @OneToOne
     private Utilisateur utilisateur;
+    
+    @OneToMany(mappedBy = "candidate")
+    private List<Application> applications;
 }

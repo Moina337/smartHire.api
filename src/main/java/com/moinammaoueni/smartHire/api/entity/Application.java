@@ -2,16 +2,10 @@ package com.moinammaoueni.smartHire.api.entity;
 
 import java.time.LocalDateTime;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.moinammaoueni.smartHire.api.num.StatutApplication;
+
+import jakarta.persistence.*;
+import lombok.*;
 
 @Entity
 @Getter
@@ -25,13 +19,49 @@ public class Application {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // date de postulation
     private LocalDateTime appliedAt;
 
-    private String statut;
+    // statut de la candidature
+    @Enumerated(EnumType.STRING)
+    private StatutApplication statut;
 
+    // candidat qui postule
     @ManyToOne
+    @JoinColumn(name = "candidate_id")
     private Candidate candidate;
 
     @ManyToOne
+    @JoinColumn(name = "job_id")
     private Job job;
+
+    // snapshot du CV utilisé au moment de la postulation
+    private String cvFileName;
+
+    // message / lettre de motivation
+    @Column(length = 2000)
+    private String message;
+
+    // audit
+    private LocalDateTime createdAt;
+
+    private LocalDateTime updatedAt;
+
+    @PrePersist
+    public void prePersist() {
+
+        LocalDateTime now = LocalDateTime.now();
+
+        this.appliedAt = now;
+        this.createdAt = now;
+
+        if (this.statut == null) {
+            this.statut = StatutApplication.EN_ATTENTE;
+        }
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        this.updatedAt = LocalDateTime.now();
+    }
 }

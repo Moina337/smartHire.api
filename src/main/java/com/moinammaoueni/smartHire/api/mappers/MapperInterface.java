@@ -3,7 +3,9 @@ package com.moinammaoueni.smartHire.api.mappers;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
+import com.moinammaoueni.smartHire.api.Application;
 import com.moinammaoueni.smartHire.api.config.AppProperties;
+import com.moinammaoueni.smartHire.api.dto.ApplicationResponse;
 import com.moinammaoueni.smartHire.api.dto.CandidateRequest;
 import com.moinammaoueni.smartHire.api.dto.CandidateResponse;
 import com.moinammaoueni.smartHire.api.dto.DetailCandidatResponse;
@@ -18,23 +20,28 @@ import lombok.RequiredArgsConstructor;
 
 @Mapper(componentModel = "spring")
 public interface MapperInterface {
-	
-	
+
 	Job jobRequestToJob(JobRequest jobRequest);
-	
+
 	JobResponse jobToJobResponse(Job job);
-	
-	// Candidat 
+
+	// Candidat
 	@Mapping(target = "id", ignore = true)
 	@Mapping(target = "utilisateur", ignore = true)
 	@Mapping(target = "cvUrl", ignore = true)
 	Candidate candidatRquestToCandidat(CandidateRequest request);
-	  
-	@Mapping(target = "nom",source = "utilisateur.nom")
-	CandidateResponse  candidatToCandidateResponse(Candidate candidate);
-	
-	@Mapping(target = "nom",source = "utilisateur.nom")
-	@Mapping(target = "email",source = "utilisateur.email")
+
+	@Mapping(target = "nom", source = "utilisateur.nom")
+	CandidateResponse candidatToCandidateResponse(Candidate candidate);
+
+	@Mapping(target = "nom", source = "utilisateur.nom")
+	@Mapping(target = "email", source = "utilisateur.email")
 	DetailCandidatResponse candidatToDetailCandidat(Candidate candidate);
+
+	// postulation
+	
+
+	
+	ApplicationResponse applicationToResponse(Application application);
 
 }

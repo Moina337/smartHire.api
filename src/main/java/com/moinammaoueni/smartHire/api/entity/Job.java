@@ -1,21 +1,13 @@
 package com.moinammaoueni.smartHire.api.entity;
 
-
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.moinammaoueni.smartHire.api.num.JobStatus;
 
-import jakarta.persistence.ElementCollection;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.persistence.*;
+import lombok.*;
 
 @Entity
 @Getter
@@ -31,17 +23,33 @@ public class Job {
 
     private String titre;
 
+    @Column(length = 2000)
     private String description;
 
     private Integer experienceMin;
 
     @ElementCollection
-    private List<String> competencesRequises;
+    private List<String> competencesRequises = new ArrayList<>();
 
     private LocalDate datePublication;
-   
 
     private LocalDate dateExpiration;
 
+    @Enumerated(EnumType.STRING)
     private JobStatus status;
+
+    @OneToMany(mappedBy = "job")
+    private List<Application> applications = new ArrayList<>();
+
+    @PrePersist
+    public void prePersist() {
+
+        if (datePublication == null) {
+            datePublication = LocalDate.now();
+        }
+
+        if (status == null) {
+            status = JobStatus.OUVERTE;
+        }
+    }
 }
