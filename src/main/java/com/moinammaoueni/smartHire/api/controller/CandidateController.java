@@ -1,4 +1,4 @@
-package com.moinammaoueni.smartHire.api.controller;
+ package com.moinammaoueni.smartHire.api.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -25,36 +25,40 @@ public class CandidateController {
 
 	private final CandidatService candidatService;
 
-	// 🔹 GET - voir mon profil candidat
+	//  GET - voir mon profil candidat
 	@GetMapping
 	public ResponseEntity<DetailCandidatResponse> getMyProfile() {
 
 		DetailCandidatResponse response = candidatService.monProfil();
 
 		return ResponseEntity.ok(response);
+		
 	}
 
-	// 🔹 POST - créer / compléter profil candidat
+	// POST - créer / compléter profil candidat
 	@PostMapping
 	public ResponseEntity<CandidateResponse> createProfile(@Valid @RequestBody CandidateRequest request) {
 
 		CandidateResponse response = candidatService.completerProfilCandidat(request);
 
 		return ResponseEntity.status(HttpStatus.CREATED).body(response);
+		
 	}
 
-	// 🔹 PUT - modifier profil candidat
+	// PUT - modifier profil candidat
 	@PutMapping
 	public ResponseEntity<CandidateResponse> updateProfile(@Valid @RequestBody CandidateRequest request) {
 
 		CandidateResponse response = candidatService.modifierProfil(request);
 
 		return ResponseEntity.ok(response);
+		
 	}
 
 	@PutMapping(value = "/cv", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<DetailCandidatResponse> uploadCv(@RequestParam("file") MultipartFile file) {
 
 		return ResponseEntity.ok(candidatService.uploadCv(file));
+		
 	}
 }

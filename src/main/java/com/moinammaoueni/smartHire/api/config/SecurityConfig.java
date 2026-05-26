@@ -28,15 +28,22 @@ public class SecurityConfig {
 						// Swagger
 						.requestMatchers("/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**").permitAll()
 
-						// Auth public
+						// public
 						.requestMatchers("/api/auth/**").permitAll()
+						.requestMatchers("/api/public/jobs/**").permitAll()
 
 						// Candidate
 						.requestMatchers("/api/candidate/**").hasRole("CANDIDAT")
+						.requestMatchers("/api/candidate/profile/**").hasRole("CANDIDAT")
 						
-						.requestMatchers("/api/admin/jobs").hasRole("ADMIN")	
+						// Admin
+						.requestMatchers("/api/admin/jobs/**").hasRole("ADMIN")	
 						
-						.requestMatchers("/api/admin/candidates").hasRole("ADMIN")
+						.requestMatchers("/api/admin/candidates/**").hasRole("ADMIN")
+						
+						.requestMatchers("/api/admin/applications/**").hasRole("ADMIN")
+						
+						.requestMatchers("/api/admin/candidates/**").hasRole("ADMIN")
 						
 						// autres routes
 						.anyRequest().authenticated())

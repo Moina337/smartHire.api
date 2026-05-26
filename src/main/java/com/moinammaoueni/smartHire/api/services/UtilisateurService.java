@@ -6,7 +6,7 @@ import com.moinammaoueni.smartHire.api.dto.LoginRequest;
 import com.moinammaoueni.smartHire.api.dto.RegisterRequest;
 
 public interface UtilisateurService {
-	
+	 
 	AuthResponse register(RegisterRequest request);
 	
 	AuthResponse connection(LoginRequest request);
