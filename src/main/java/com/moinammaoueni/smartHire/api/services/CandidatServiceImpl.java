@@ -2,7 +2,9 @@ package com.moinammaoueni.smartHire.api.services;
 
 import java.util.List;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.moinammaoueni.smartHire.api.config.CurrentUser;
@@ -34,6 +36,8 @@ public class CandidatServiceImpl implements CandidatService {
 	private final FileStorageService fileStorageService;
 
 	@Override
+	@Transactional
+	@PreAuthorize("hasRole('CANDIDAT')")
 	public CandidateResponse completerProfilCandidat(CandidateRequest request) {
 
 		Long userId = currentUser.getId();
@@ -55,6 +59,7 @@ public class CandidatServiceImpl implements CandidatService {
 	}
 
 	@Override
+	@PreAuthorize("hasRole('CANDIDAT')")
 	public DetailCandidatResponse monProfil() {
 
 		// 1. utilisateur connecté
@@ -75,18 +80,23 @@ public class CandidatServiceImpl implements CandidatService {
 	}
 
 	@Override
+	@Transactional
+	@PreAuthorize("hasRole('CANDIDAT')")
 	public CandidateResponse modifierProfil(CandidateRequest request) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
+	@Transactional
+	@PreAuthorize("hasRole('CANDIDAT')")
 	public void supprimerProfil() {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
+	@PreAuthorize("hasRole('ADMIN')")
 	public List<CandidateResponse> listeCandidats() {
 		// TODO Auto-generated method stub
 
@@ -99,6 +109,7 @@ public class CandidatServiceImpl implements CandidatService {
 	}
 
 	@Override
+	@PreAuthorize("hasRole('ADMIN')")
 	public DetailCandidatResponse candidatParId(Long candidatId) {
 
 		Candidate candidat = candidatRepository.findById(candidatId)
@@ -108,6 +119,8 @@ public class CandidatServiceImpl implements CandidatService {
 	}
 
 	@Override
+	@PreAuthorize("hasRole('CANDIDAT')")
+	@Transactional
 	public DetailCandidatResponse uploadCv(MultipartFile file) {
 
 		// 1. validation

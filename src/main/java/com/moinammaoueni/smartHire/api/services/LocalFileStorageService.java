@@ -15,70 +15,55 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class LocalFileStorageService
-        implements FileStorageService {
+public class LocalFileStorageService implements FileStorageService {
 
-    private final AppProperties appProperties;
+	private final AppProperties appProperties;
 
-    private final Path uploadPath =
-            Paths.get("uploads").toAbsolutePath();
+	private final Path uploadPath = Paths.get("uploads").toAbsolutePath();
 
-    @Override
-    public String save(MultipartFile file) {
+	@Override
+	public String save(MultipartFile file) {
 
-        try {
+		try {
 
-            Files.createDirectories(uploadPath);
+			Files.createDirectories(uploadPath);
 
-            String fileName =
-                    UUID.randomUUID()
-                    + "_"
-                    + file.getOriginalFilename()
-                            .replace(" ", "_");
+			String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename().replace(" ", "_");
 
-            Path filePath =
-                    uploadPath.resolve(fileName);
+			Path filePath = uploadPath.resolve(fileName);
 
-            Files.copy(
-                    file.getInputStream(),
-                    filePath
-            );
+			Files.copy(file.getInputStream(), filePath);
 
-            return fileName;
+			return fileName;
 
-        } catch (IOException e) {
+		} catch (IOException e) {
 
-            throw new RuntimeException(
-                    "Erreur upload fichier", e);
-        }
-    }
+			throw new RuntimeException("Erreur upload fichier", e);
+		}
+	}
 
-    @Override
-    public void delete(String fileName) {
+	@Override
+	public void delete(String fileName) {
 
-        try {
+		try {
 
-            Path filePath =
-                    uploadPath.resolve(fileName);
+			Path filePath = uploadPath.resolve(fileName);
 
-            Files.deleteIfExists(filePath);
+			Files.deleteIfExists(filePath);
 
-        } catch (IOException e) {
+		} catch (IOException e) {
 
-            throw new RuntimeException(
-                    "Erreur suppression fichier", e);
-        }
-    }
+			throw new RuntimeException("Erreur suppression fichier", e);
+		}
+	}
 
-    @Override
-    public String getUrl(String fileName) {
+	@Override
+	public String getUrl(String fileName) {
 
-        if (fileName == null) {
-            return null;
-        }
+		if (fileName == null) {
+			return null;
+		}
 
-        return appProperties.getFileBaseUrl()
-                + "/"
-                + fileName;
-    }
+		return appProperties.getFileBaseUrl() + "/" + fileName;
+	}
 }

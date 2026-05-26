@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.moinammaoueni.smartHire.api.config.CurrentUser;
@@ -38,6 +39,7 @@ public class ApplicationServiceImpl implements ApplicationService {
 
 	@Override
 	@PreAuthorize("hasRole('CANDIDAT')")
+	@Transactional
 	public ApplicationResponse postuler(Long jobId, MultipartFile cvFile) {
 
 		// 1. user connecté

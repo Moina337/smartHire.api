@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.moinammaoueni.smartHire.api.config.JwtService;
 import com.moinammaoueni.smartHire.api.config.UtilisateurDetails;
@@ -32,42 +33,33 @@ public class UtilisateurServiceImpl implements UtilisateurService, UserDetailsSe
 	private final PasswordEncoder encoder;
 
 	private final JwtService jwtService;
-	
-	
 
 	@Override
+	@Transactional
 	public AuthResponse register(RegisterRequest request) {
 
-	    // 1. vérifier email
-	    if (utilisateurRepository.existsByEmail(request.getEmail())) {
-	        throw new UserAlreadyExistsException("Email déjà utilisé");
-	    }
+		// 1. vérifier email
+		if (utilisateurRepository.existsByEmail(request.getEmail())) {
+			throw new UserAlreadyExistsException("Email déjà utilisé");
+		}
 
-	    // 2. créer user
-	    Utilisateur utilisateur = Utilisateur.builder()
-	            .nom(request.getNom())
-	            .email(request.getEmail())
-	            .password(encoder.encode(request.getPassword()))
-	            .role(Role.CANDIDAT)
-	            .build();
+		// 2. créer user
+		Utilisateur utilisateur = Utilisateur.builder().nom(request.getNom()).email(request.getEmail())
+				.password(encoder.encode(request.getPassword())).role(Role.CANDIDAT).build();
 
-	    // 3. save
-	    Utilisateur savedUser =
-	            utilisateurRepository.save(utilisateur);
+		// 3. save
+		Utilisateur savedUser = utilisateurRepository.save(utilisateur);
 
-	    // 4. claims JWT
-	    Map<String, Object> claims = new HashMap<>();
-	    claims.put("role", savedUser.getRole().name());
-	    claims.put("userId", savedUser.getId());
+		// 4. claims JWT
+		Map<String, Object> claims = new HashMap<>();
+		claims.put("role", savedUser.getRole().name());
+		claims.put("userId", savedUser.getId());
 
-	    // 5. token
-	    String token =
-	            jwtService.generateToken(
-	                    claims,
-	                    savedUser.getEmail());
+		// 5. token
+		String token = jwtService.generateToken(claims, savedUser.getEmail());
 
-	    // 6. return
-	    return AuthResponse.builder().token(token).build();
+		// 6. return
+		return AuthResponse.builder().token(token).build();
 	}
 
 	@Override
