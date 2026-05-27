@@ -9,7 +9,7 @@ public interface JobService {
 	
 	JobResponse creerUnJob(JobRequest jobRequest);
 	
-	Page<JobResponse> tousJobs(
+	Page<JobResponse> tousJobs( String keyword,
 	        Pageable pageable);
 	
 	JobResponse afficheJobParId(long jib_id);

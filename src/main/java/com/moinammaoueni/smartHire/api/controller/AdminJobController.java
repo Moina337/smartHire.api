@@ -2,6 +2,7 @@ package com.moinammaoueni.smartHire.api.controller;
 
 
 
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.moinammaoueni.smartHire.api.dto.JobRequest;
@@ -64,9 +66,11 @@ public class AdminJobController {
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Liste récupérée avec succès")
     })
-    public ResponseEntity<Page<JobResponse>> getAll(Pageable pageable) {
+    public ResponseEntity<Page<JobResponse>> getAll(@RequestParam(
+            required = false
+        ) String keyword,@ParameterObject Pageable pageable) {
     	
-        return ResponseEntity.ok(jobService.tousJobs(pageable));
+        return ResponseEntity.ok(jobService.tousJobs(keyword, pageable));
     }
 
 }

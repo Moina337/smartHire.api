@@ -32,10 +32,31 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
-    public Page<JobResponse> tousJobs(Pageable pageable ) {
+    public Page<JobResponse>
+    tousJobs(
+            String keyword,
+            Pageable pageable) {
 
-        return  jobRepository.findAll(pageable)
-                .map(mapperInterface::jobToJobResponse);
+        Page<Job> jobs;
+
+        if(keyword != null
+                && !keyword.isBlank()) {
+
+            jobs =
+                jobRepository
+                .findByTitreContainingIgnoreCase(
+                        keyword,
+                        pageable);
+
+        } else {
+
+            jobs =
+                jobRepository
+                .findAll(pageable);
+        }
+
+        return jobs.map(
+                mapperInterface::jobToJobResponse);
     }
 
 	@Override

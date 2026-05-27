@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.moinammaoueni.smartHire.api.dto.JobResponse;
@@ -18,29 +19,24 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/api/public/jobs")
 @RequiredArgsConstructor
-@Tag(
-    name = "PUBLIC JOBS",
-    description = "Consultation publique des offres d'emploi"
-)
+@Tag(name = "PUBLIC JOBS", description = "Consultation publique des offres d'emploi")
 public class PublicJobController {
 
-    private final JobService jobService;
+	private final JobService jobService;
 
-    @GetMapping
-    public ResponseEntity<Page<JobResponse>> listJob(
-           @ParameterObject Pageable pageable) {
+	@GetMapping
+	public ResponseEntity<Page<JobResponse>> listJob(
 
-        return ResponseEntity.ok(
-                jobService.tousJobs(pageable)
-        );
-    }
+			@RequestParam(required = false) String keyword,
 
-    @GetMapping("/{id}")
-    public ResponseEntity<JobResponse> afficheJobParId(
-            @PathVariable Long id) {
+			@ParameterObject Pageable pageable) {
 
-        return ResponseEntity.ok(
-                jobService.afficheJobParId(id)
-        );
-    }
+		return ResponseEntity.ok(jobService.tousJobs(keyword, pageable));
+	}
+
+	@GetMapping("/{id}")
+	public ResponseEntity<JobResponse> afficheJobParId(@PathVariable Long id) {
+
+		return ResponseEntity.ok(jobService.afficheJobParId(id));
+	}
 }
