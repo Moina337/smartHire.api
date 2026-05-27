@@ -2,6 +2,8 @@ package com.moinammaoueni.smartHire.api.services;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.moinammaoueni.smartHire.api.dto.ApplicationResponse;
@@ -17,11 +19,11 @@ public interface ApplicationService {
 
     List<PostulationResponse> mesPostulations();
 
-    ApplicationResponse detailPostulation(
+	ApplicationResponse detailPostulation(
             Long applicationId
     );
     
-    List<PostulationResponse> toutesPostulations();
+    Page<PostulationResponse> toutesPostulations(Pageable pageable);
 
     ApplicationResponse detail(Long id);
 

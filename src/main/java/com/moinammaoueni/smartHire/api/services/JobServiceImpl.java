@@ -1,8 +1,7 @@
 package com.moinammaoueni.smartHire.api.services;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.moinammaoueni.smartHire.api.dto.JobRequest;
@@ -12,19 +11,15 @@ import com.moinammaoueni.smartHire.api.exception.JobNotFoundException;
 import com.moinammaoueni.smartHire.api.mappers.MapperInterface;
 import com.moinammaoueni.smartHire.api.repository.JobRepository;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class JobServiceImpl implements JobService {
 
     private final JobRepository jobRepository;
     private final MapperInterface mapperInterface;
 
-    public JobServiceImpl(
-            JobRepository jobRepository,
-            MapperInterface mapperInterface) {
-
-        this.jobRepository = jobRepository;
-        this.mapperInterface = mapperInterface;
-    }
 
     @Override
     public JobResponse creerUnJob(JobRequest jobRequest) {
@@ -37,13 +32,10 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
-    public List<JobResponse> listeJob() {
+    public Page<JobResponse> tousJobs(Pageable pageable ) {
 
-        List<Job> jobs = jobRepository.findAll();
-
-        return jobs.stream()
-                .map(mapperInterface::jobToJobResponse)
-                .collect(Collectors.toList());
+        return  jobRepository.findAll(pageable)
+                .map(mapperInterface::jobToJobResponse);
     }
 
 	@Override

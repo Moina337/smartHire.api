@@ -2,6 +2,8 @@ package com.moinammaoueni.smartHire.api.services;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -97,15 +99,11 @@ public class CandidatServiceImpl implements CandidatService {
 
 	@Override
 	@PreAuthorize("hasRole('ADMIN')")
-	public List<CandidateResponse> listeCandidats() {
+	public Page<CandidateResponse> listeCandidats(Pageable pageable) {
 		// TODO Auto-generated method stub
 
-		List<Candidate> candidates = candidatRepository.findAll();
-
-		List<CandidateResponse> responses = candidates.stream().map(mapperInterface::candidatToCandidateResponse)
-				.toList();
-
-		return responses;
+		 return   candidatRepository.findAll(pageable)
+				 .map(mapperInterface::candidatToCandidateResponse);
 	}
 
 	@Override

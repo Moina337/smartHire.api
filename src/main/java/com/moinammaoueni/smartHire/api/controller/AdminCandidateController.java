@@ -1,7 +1,8 @@
 package com.moinammaoueni.smartHire.api.controller;
 
-import java.util.List;
-
+import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,14 +29,11 @@ public class AdminCandidateController {
 	public final CandidatService candidatService;
 
 	@GetMapping
-	public ResponseEntity<List<CandidateResponse>> listeCandidats() {
+	public ResponseEntity<Page<CandidateResponse>> listeCandidats(@ParameterObject Pageable pageable ) {
 
-		List<CandidateResponse> responses = candidatService.listeCandidats();
-
-		return ResponseEntity.ok(responses);
+		 return ResponseEntity.ok(candidatService.listeCandidats(pageable)) ;
 
 	}
-
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<DetailCandidatResponse> afficheCandidatParId(Long candidat_id) {

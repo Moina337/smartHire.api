@@ -1,8 +1,10 @@
 package com.moinammaoueni.smartHire.api.controller;
 
 
-import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -49,8 +51,9 @@ public class AdminJobController {
         @ApiResponse(responseCode = "201", description = "Offre créée avec succès"),
         @ApiResponse(responseCode = "400", description = "Données invalides")
     })
-    public JobResponse create(@Valid @RequestBody JobRequest request) {
-        return jobService.creerUnJob(request);
+    public ResponseEntity<JobResponse> create(@Valid @RequestBody JobRequest request) {
+		
+        return  ResponseEntity.ok(jobService.creerUnJob(request));
     }
 
     @GetMapping
@@ -61,8 +64,9 @@ public class AdminJobController {
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Liste récupérée avec succès")
     })
-    public List<JobResponse> getAll() {
-        return jobService.listeJob();
+    public ResponseEntity<Page<JobResponse>> getAll(Pageable pageable) {
+    	
+        return ResponseEntity.ok(jobService.tousJobs(pageable));
     }
 
 }

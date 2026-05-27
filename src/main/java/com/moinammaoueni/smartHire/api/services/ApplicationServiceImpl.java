@@ -3,6 +3,8 @@ package com.moinammaoueni.smartHire.api.services;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -126,9 +128,10 @@ public class ApplicationServiceImpl implements ApplicationService {
 	
 	@Override
 	@PreAuthorize("hasRole('ADMIN')")
-	public List<PostulationResponse> toutesPostulations() {
+	public Page<PostulationResponse> toutesPostulations(Pageable pageable) {
 
-		return applicationRepository.findAll().stream().map(mapperInterface::applicationToPostulation).toList();
+		return applicationRepository.findAll(pageable)
+				.map(mapperInterface::applicationToPostulation);
 	}
 
 	@Override

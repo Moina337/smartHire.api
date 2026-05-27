@@ -1,7 +1,8 @@
 package com.moinammaoueni.smartHire.api.services;
 
-import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.moinammaoueni.smartHire.api.dto.CandidateRequest;
@@ -27,7 +28,7 @@ public interface CandidatService {
     void supprimerProfil();
 
     // liste candidats (ADMIN / RECRUTEUR)
-    List<CandidateResponse> listeCandidats();
+    Page<CandidateResponse> listeCandidats(Pageable pageable);
 
     // voir candidat par id (ADMIN / RECRUTEUR)
     DetailCandidatResponse candidatParId(Long candidatId);

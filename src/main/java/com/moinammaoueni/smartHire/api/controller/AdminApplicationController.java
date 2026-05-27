@@ -1,7 +1,8 @@
 package com.moinammaoueni.smartHire.api.controller;
 
-import java.util.List;
-
+import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,9 +26,9 @@ public class AdminApplicationController {
 
 	// GET /api/admin/applications
 	@GetMapping
-	public ResponseEntity<List<PostulationResponse>> toutesPostulations() {
+	public ResponseEntity<Page<PostulationResponse>> toutesPostulations(@ParameterObject Pageable pageable) {
 
-		return ResponseEntity.ok(adminApplicationService.toutesPostulations());
+		return ResponseEntity.ok(adminApplicationService.toutesPostulations(pageable));
 	}
 
 	// GET /api/admin/applications/{id}
