@@ -13,44 +13,39 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-	private final JwtFilter jwtFilter;
+    private final JwtFilter jwtFilter;
 
-	@Bean
-	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-		http.csrf(csrf -> csrf.disable())
+        http
+            .cors(cors -> {})
+            .csrf(csrf -> csrf.disable())
 
-				// JWT = stateless
-				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .sessionManagement(session ->
+                session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            )
 
-				.authorizeHttpRequests(auth -> auth
+            .authorizeHttpRequests(auth -> auth
 
-						// Swagger
-						.requestMatchers("/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**").permitAll()
+                // Swagger
+                .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
 
-						// public
-						.requestMatchers("/api/auth/**").permitAll()
-						.requestMatchers("/api/public/jobs/**").permitAll()
+                // Auth + Public
+                .requestMatchers("/api/auth/**").permitAll()
+                .requestMatchers("/api/public/**").permitAll()
 
-						// Candidate
-						.requestMatchers("/api/candidate/**").hasRole("CANDIDAT")
-						.requestMatchers("/api/candidate/profile/**").hasRole("CANDIDAT")
-						
-						// Admin
-						.requestMatchers("/api/admin/jobs/**").hasRole("ADMIN")	
-						
-						.requestMatchers("/api/admin/candidates/**").hasRole("ADMIN")
-						
-						.requestMatchers("/api/admin/applications/**").hasRole("ADMIN")
-						
-						.requestMatchers("/api/admin/candidates/**").hasRole("ADMIN")
-						
-						// autres routes
-						.anyRequest().authenticated())
+                // Candidate
+                .requestMatchers("/api/candidate/**").hasRole("CANDIDAT")
 
-				// JWT FILTER ICI
-				.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+                // Admin
+                .requestMatchers("/api/admin/**").hasRole("ADMIN")
 
-		return http.build();
-	}
+                .anyRequest().authenticated()
+            )
+
+            .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+
+        return http.build();
+    }
 }

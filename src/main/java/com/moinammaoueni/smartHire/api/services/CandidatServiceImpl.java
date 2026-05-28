@@ -77,7 +77,9 @@ public class CandidatServiceImpl implements CandidatService {
 
 		// 4. construire response
 		DetailCandidatResponse response = mapperInterface.candidatToDetailCandidat(candidat);
-
+        
+		response.setCvUrl(fileStorageService.getUrl(candidat.getCvUrl()));
+		
 		return response;
 	}
 
