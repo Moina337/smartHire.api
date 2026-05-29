@@ -76,5 +76,19 @@ public class GlobalExceptionHandler {
 	            .status(HttpStatus.NOT_FOUND)
 	            .body(error);
 	}
+	
+	@ExceptionHandler(AlreadyAppliedException.class)
+	public ResponseEntity<ErrorResponse> handleAlreadyApplied(AlreadyAppliedException ex) {
+
+	    ErrorResponse error = ErrorResponse.builder()
+	            .message(ex.getMessage())
+	            .status(HttpStatus.CONFLICT.value())
+	            .timestamp(LocalDateTime.now())
+	            .build();
+
+	    return ResponseEntity
+	            .status(HttpStatus.CONFLICT)
+	            .body(error);
+	}
 
 }

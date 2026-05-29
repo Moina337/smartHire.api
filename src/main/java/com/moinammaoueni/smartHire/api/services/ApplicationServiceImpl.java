@@ -16,6 +16,7 @@ import com.moinammaoueni.smartHire.api.dto.PostulationResponse;
 import com.moinammaoueni.smartHire.api.entity.Application;
 import com.moinammaoueni.smartHire.api.entity.Candidate;
 import com.moinammaoueni.smartHire.api.entity.Job;
+import com.moinammaoueni.smartHire.api.exception.AlreadyAppliedException;
 import com.moinammaoueni.smartHire.api.exception.CandidatNotFoundException;
 import com.moinammaoueni.smartHire.api.exception.JobNotFoundException;
 import com.moinammaoueni.smartHire.api.exception.UserAlreadyExistsException;
@@ -59,7 +60,7 @@ public class ApplicationServiceImpl implements ApplicationService {
 
 		if (alreadyApplied) {
 
-			throw new RuntimeException("Vous avez déjà postulé");
+			throw new AlreadyAppliedException("Vous avez déjà postulé");
 		}
 
 		// 5. CV obligatoire

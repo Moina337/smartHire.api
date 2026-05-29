@@ -5,7 +5,7 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5433/smarthire
     username: postgres
-    password: amir2026
+    password: password
 
   jpa:
     hibernate:
