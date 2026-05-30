@@ -90,5 +90,20 @@ public class GlobalExceptionHandler {
 	            .status(HttpStatus.CONFLICT)
 	            .body(error);
 	}
+	
+	@ExceptionHandler(PostulationNotFoundException.class)
+	public ResponseEntity<ErrorResponse> handlerPostulationNotFound(PostulationNotFoundException ex){
+		  
+		ErrorResponse error =
+	            ErrorResponse.builder()
+	                    .message(ex.getMessage())
+	                    .status(HttpStatus.NOT_FOUND.value())
+	                    .timestamp(LocalDateTime.now())
+	                    .build();
+
+	    return ResponseEntity
+	            .status(HttpStatus.NOT_FOUND)
+	            .body(error);
+	}
 
 }

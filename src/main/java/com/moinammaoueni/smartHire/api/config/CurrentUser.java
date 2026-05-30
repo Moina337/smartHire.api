@@ -40,4 +40,8 @@ public class CurrentUser {
     public String getRole() {
         return getUser().getRole();
     }
+    
+    public boolean hasRole(String role) {
+        return role.equals(getRole());
+    }
 }

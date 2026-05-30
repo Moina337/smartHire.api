@@ -40,6 +40,9 @@ public class SecurityConfig {
 
                 // Admin
                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                
+                .requestMatchers("/api/files/cv/**")
+                .hasAnyRole("CANDIDAT", "ADMIN")
 
                 .anyRequest().authenticated()
             )

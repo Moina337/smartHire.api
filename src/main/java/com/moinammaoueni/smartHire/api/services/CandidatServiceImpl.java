@@ -1,7 +1,5 @@
 package com.moinammaoueni.smartHire.api.services;
 
-import java.util.List;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -76,11 +74,8 @@ public class CandidatServiceImpl implements CandidatService {
 				.orElseThrow(() -> new RuntimeException("Profil candidat non complété"));
 
 		// 4. construire response
-		DetailCandidatResponse response = mapperInterface.candidatToDetailCandidat(candidat);
+		return mapperInterface.candidatToDetailCandidat(candidat);
         
-		response.setCvUrl(fileStorageService.getUrl(candidat.getCvUrl()));
-		
-		return response;
 	}
 
 	@Override
@@ -160,10 +155,7 @@ public class CandidatServiceImpl implements CandidatService {
 		Candidate saved = candidatRepository.save(candidat);
 
 		// 7. mapping response
-		DetailCandidatResponse response = mapperInterface.candidatToDetailCandidat(saved);
+		return mapperInterface.candidatToDetailCandidat(saved);
 
-		response.setCvUrl(fileStorageService.getUrl(saved.getCvUrl()));
-
-		return response;
 	}
 }

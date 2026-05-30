@@ -9,5 +9,7 @@ import com.moinammaoueni.smartHire.api.entity.Candidate;
 public interface CandidatRepository extends JpaRepository<Candidate, Long> {
 	
 	Optional<Candidate> findByUtilisateurId(Long userId);
+	
+	Optional<Candidate> findByCvUrl(String fileName);
 
 }

@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.moinammaoueni.smartHire.api.config.FileValidator;
 import com.moinammaoueni.smartHire.api.dto.CandidateRequest;
 import com.moinammaoueni.smartHire.api.dto.CandidateResponse;
 import com.moinammaoueni.smartHire.api.dto.DetailCandidatResponse;
@@ -24,6 +25,9 @@ import lombok.RequiredArgsConstructor;
 public class CandidateController {
 
 	private final CandidatService candidatService;
+	
+	private final FileValidator validator;
+	
 
 	//  GET - voir mon profil candidat
 	@GetMapping
@@ -58,6 +62,8 @@ public class CandidateController {
 	@PutMapping(value = "/cv", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<DetailCandidatResponse> uploadCv(@RequestParam("file") MultipartFile file) {
 
+		 validator.validate(file);
+		 
 		return ResponseEntity.ok(candidatService.uploadCv(file));
 		
 	}

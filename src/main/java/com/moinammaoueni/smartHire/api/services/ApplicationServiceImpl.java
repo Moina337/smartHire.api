@@ -1,6 +1,6 @@
 package com.moinammaoueni.smartHire.api.services;
 
-import java.time.LocalDateTime;
+
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -19,9 +19,8 @@ import com.moinammaoueni.smartHire.api.entity.Job;
 import com.moinammaoueni.smartHire.api.exception.AlreadyAppliedException;
 import com.moinammaoueni.smartHire.api.exception.CandidatNotFoundException;
 import com.moinammaoueni.smartHire.api.exception.JobNotFoundException;
-import com.moinammaoueni.smartHire.api.exception.UserAlreadyExistsException;
+import com.moinammaoueni.smartHire.api.exception.PostulationNotFoundException;
 import com.moinammaoueni.smartHire.api.mappers.MapperInterface;
-import com.moinammaoueni.smartHire.api.num.JobStatus;
 import com.moinammaoueni.smartHire.api.num.StatutApplication;
 import com.moinammaoueni.smartHire.api.repository.ApplicationRepository;
 import com.moinammaoueni.smartHire.api.repository.CandidatRepository;
@@ -55,7 +54,7 @@ public class ApplicationServiceImpl implements ApplicationService {
 		// 3. job
 		Job job = jobRepository.findById(jobId).orElseThrow(() -> new JobNotFoundException("Offre introuvable"));
 
-		// 4. déjà postulé ?
+		//  déjà postulé ?
 		boolean alreadyApplied = applicationRepository.existsByCandidateIdAndJobId(candidate.getId(), jobId);
 
 		if (alreadyApplied) {
@@ -77,14 +76,13 @@ public class ApplicationServiceImpl implements ApplicationService {
 
 		Application saved = applicationRepository.save(application);
 
-		ApplicationResponse response = mapperInterface.applicationToResponse(saved);
+		return mapperInterface.applicationToResponse(saved);
 
-		response.setCvFileUrl(fileStorageService.getUrl(cvFileName));
-
-		return response;
 	}
 
+	
 	@Override
+	@PreAuthorize("hasRole('CANDIDAT')")
 	public List<PostulationResponse> mesPostulations() {
 
 		Long userId = currentUser.getId();
@@ -97,6 +95,7 @@ public class ApplicationServiceImpl implements ApplicationService {
 	}
 
 	@Override
+	@PreAuthorize("hasRole('CANDIDAT')")
 	public ApplicationResponse detailPostulation(Long applicationId) {
 
 		// 1. current user
@@ -108,31 +107,19 @@ public class ApplicationServiceImpl implements ApplicationService {
 
 		// 3. postulation
 		Application application = applicationRepository.findByIdAndCandidateId(applicationId, candidate.getId())
-				.orElseThrow(() -> new RuntimeException("Postulation introuvable"));
+				.orElseThrow(() -> new PostulationNotFoundException("Postulation introuvable"));
 
-		System.out.println(application.getCvFileName());
-
+		
 		// 4. mapping
-		ApplicationResponse response = mapperInterface.applicationToResponse(application);
+		return mapperInterface.applicationToResponse(application);
 
-		// 5. enrichir URL CV
-		if (application.getCvFileName() != null && !application.getCvFileName().isBlank()) {
-
-			response.setCvFileUrl(fileStorageService.getUrl(application.getCvFileName()));
-
-		}
-
-		return response;
 	}
 
-	
-	
 	@Override
 	@PreAuthorize("hasRole('ADMIN')")
 	public Page<PostulationResponse> toutesPostulations(Pageable pageable) {
 
-		return applicationRepository.findAll(pageable)
-				.map(mapperInterface::applicationToPostulation);
+		return applicationRepository.findAll(pageable).map(mapperInterface::applicationToPostulation);
 	}
 
 	@Override
@@ -140,16 +127,10 @@ public class ApplicationServiceImpl implements ApplicationService {
 	public ApplicationResponse detail(Long id) {
 
 		Application application = applicationRepository.findById(id)
-				.orElseThrow(() -> new RuntimeException("Postulation introuvable"));
+				.orElseThrow(() -> new PostulationNotFoundException("Postulation introuvable"));
 
-		ApplicationResponse response = mapperInterface.applicationToResponse(application);
+		 return mapperInterface.applicationToResponse(application);
 
-		if (application.getCvFileName() != null && !application.getCvFileName().isBlank()) {
-
-			response.setCvFileUrl(fileStorageService.getUrl(application.getCvFileName()));
-		}
-
-		return response;
 	}
 
 	@Override
@@ -157,20 +138,14 @@ public class ApplicationServiceImpl implements ApplicationService {
 	public ApplicationResponse changerStatut(Long id, StatutApplication statut) {
 
 		Application application = applicationRepository.findById(id)
-				.orElseThrow(() -> new RuntimeException("Postulation introuvable"));
+				.orElseThrow(() -> new PostulationNotFoundException("Postulation introuvable"));
 
 		application.setStatut(statut);
 
 		Application saved = applicationRepository.save(application);
 
-		ApplicationResponse response = mapperInterface.applicationToResponse(saved);
+		return mapperInterface.applicationToResponse(saved);
 
-		if (saved.getCvFileName() != null && !saved.getCvFileName().isBlank()) {
-
-			response.setCvFileUrl(fileStorageService.getUrl(saved.getCvFileName()));
-		}
-
-		return response;
 	}
 
 }
