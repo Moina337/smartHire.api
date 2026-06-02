@@ -3,6 +3,8 @@ package com.moinammaoueni.smartHire.api.config;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
@@ -11,18 +13,15 @@ import java.util.Map;
 import java.util.function.Function;
 
 @Service
+@RequiredArgsConstructor
 public class JwtService {
 
     private final JwtProperties jwtProperties;
 
-    public JwtService(JwtProperties jwtProperties) {
-        this.jwtProperties = jwtProperties;
-    }
-
     // Génération du token (CLEAN)
     public String generateToken(Map<String, Object> claims, String username) {
         return createToken(claims, username);
-    }
+	}
 
     // Construction du token
     private String createToken(Map<String, Object> claims, String subject) {

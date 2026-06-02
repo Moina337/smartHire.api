@@ -18,3 +18,15 @@ jwt:
   
 app:
   file-base-url: http://localhost:8080/uploads  
+  
+  
+  security:
+      oauth2:
+        client:
+          registration:
+            google:
+              client-id: 12706545451-dmus44v27oj8i3aj61sib5tbf28me16b.apps.googleusercontent.com
+              client-secret: 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
+              scope:
+                - email
+                - profile

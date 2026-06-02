@@ -40,6 +40,7 @@ public class JwtFilter extends OncePerRequestFilter {
 	    String username = null;
 
 	    if (authHeader != null && authHeader.startsWith("Bearer ")) {
+	    	
 	        token = authHeader.substring(7);
 
 	        try {

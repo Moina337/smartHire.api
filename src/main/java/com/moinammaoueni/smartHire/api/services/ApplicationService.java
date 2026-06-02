@@ -13,8 +13,7 @@ import com.moinammaoueni.smartHire.api.num.StatutApplication;
 public interface ApplicationService {
 
 	ApplicationResponse postuler(
-	        Long jobId,
-	        MultipartFile cvFile
+	        Long jobId
 	);
 
     List<PostulationResponse> mesPostulations();

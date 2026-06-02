@@ -3,6 +3,11 @@ package com.moinammaoueni.smartHire.api.config;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 @Component
 @ConfigurationProperties(prefix = "jwt")
 public class JwtProperties {
@@ -11,11 +16,4 @@ public class JwtProperties {
     
     private long expiration;
 
-    public String getSecret() { return secret; }
-    
-    public void setSecret(String secret) { this.secret = secret; }
-
-    public long getExpiration() { return expiration; }
-    
-    public void setExpiration(long expiration) { this.expiration = expiration; }
 }

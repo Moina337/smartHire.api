@@ -14,9 +14,11 @@ import lombok.RequiredArgsConstructor;
 public class SecurityConfig {
 
     private final JwtFilter jwtFilter;
+    private final OAuth2SuccessHandler oauth2SuccessHandler;
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http)
+            throws Exception {
 
         http
             .cors(cors -> {})
@@ -29,25 +31,45 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
 
                 // Swagger
-                .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                .requestMatchers(
+                        "/swagger-ui/**",
+                        "/v3/api-docs/**"
+                ).permitAll()
 
-                // Auth + Public
-                .requestMatchers("/api/auth/**").permitAll()
-                .requestMatchers("/api/public/**").permitAll()
+                // Auth API
+                .requestMatchers(
+                        "/api/auth/**",
+                        "/api/public/**"
+                ).permitAll()
+
+                // OAuth2 Google
+                .requestMatchers(
+                        "/oauth2/**",
+                        "/login/**"
+                ).permitAll()
 
                 // Candidate
-                .requestMatchers("/api/candidate/**").hasRole("CANDIDAT")
+                .requestMatchers("/api/candidate/**")
+                .hasRole("CANDIDAT")
 
                 // Admin
-                .requestMatchers("/api/admin/**").hasRole("ADMIN")
-                
+                .requestMatchers("/api/admin/**")
+                .hasRole("ADMIN")
+
                 .requestMatchers("/api/files/cv/**")
                 .hasAnyRole("CANDIDAT", "ADMIN")
 
                 .anyRequest().authenticated()
             )
 
-            .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+            .oauth2Login(oauth -> oauth
+                    .successHandler(oauth2SuccessHandler)
+            )
+
+            .addFilterBefore(
+                    jwtFilter,
+                    UsernamePasswordAuthenticationFilter.class
+            );
 
         return http.build();
     }

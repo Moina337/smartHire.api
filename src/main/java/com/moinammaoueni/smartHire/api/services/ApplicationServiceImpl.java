@@ -42,7 +42,7 @@ public class ApplicationServiceImpl implements ApplicationService {
 	@Override
 	@PreAuthorize("hasRole('CANDIDAT')")
 	@Transactional
-	public ApplicationResponse postuler(Long jobId, MultipartFile cvFile) {
+	public ApplicationResponse postuler(Long jobId) {
 
 		// 1. user connecté
 		Long userId = currentUser.getId();
@@ -62,17 +62,9 @@ public class ApplicationServiceImpl implements ApplicationService {
 			throw new AlreadyAppliedException("Vous avez déjà postulé");
 		}
 
-		// 5. CV obligatoire
-		if (cvFile == null || cvFile.isEmpty()) {
-
-			throw new RuntimeException("CV obligatoire");
-		}
-
-		// 6. upload CV
-		String cvFileName = fileStorageService.save(cvFile);
 
 		// 7. save application
-		Application application = Application.builder().candidate(candidate).job(job).cvFileName(cvFileName).build();
+		Application application = Application.builder().candidate(candidate).job(job).build();
 
 		Application saved = applicationRepository.save(application);
 

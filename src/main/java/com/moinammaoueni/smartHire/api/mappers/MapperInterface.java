@@ -49,6 +49,7 @@ public interface MapperInterface {
 	@Mapping(target = "jobTitre", source = "job.titre")
 	@Mapping(target = "jobId", source = "job.id")
 	@Mapping(target = "candidateId", source = "candidate.id")
+	@Mapping(target = "cvFileUrl", source = "candidate.cvUrl")
 	ApplicationResponse applicationToResponse(Application application);
 
 }

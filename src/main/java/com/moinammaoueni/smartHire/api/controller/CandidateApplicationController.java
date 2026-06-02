@@ -6,9 +6,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
+
 
 import com.moinammaoueni.smartHire.api.dto.ApplicationResponse;
 import com.moinammaoueni.smartHire.api.dto.PostulationResponse;
@@ -37,12 +37,10 @@ public class CandidateApplicationController {
             consumes = "multipart/form-data"
     )
     public ApplicationResponse postuler(
-            @PathVariable Long jobId,
-            @RequestParam("file")
-            MultipartFile file) {
+            @PathVariable Long jobId) {
 
         return applicationService
-                .postuler(jobId, file);
+                .postuler(jobId);
     }
 
     // GET /api/candidate/applications

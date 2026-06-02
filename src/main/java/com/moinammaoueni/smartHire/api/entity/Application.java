@@ -35,9 +35,6 @@ public class Application {
     @JoinColumn(name = "job_id")
     private Job job;
 
-    // snapshot du CV utilisé au moment de la postulation
-    private String cvFileName;
-
     // message / lettre de motivation
     @Column(length = 2000)
     private String message;
