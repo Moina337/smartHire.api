@@ -11,33 +11,22 @@ import java.util.List;
 @Configuration
 public class CorsConfig {
 
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
+	
+	@Bean
+	public CorsConfigurationSource corsConfigurationSource() {
 
-        CorsConfiguration config = new CorsConfiguration();
+	    CorsConfiguration config = new CorsConfiguration();
 
-        //  Autorise Angular + mobile/IP + ngrok
-        config.setAllowedOriginPatterns(List.of(
-                "http://localhost:4200",
-                "https://salonmastere.netlify.app"
-        ));
+	    config.addAllowedOrigin("http://localhost:4200");
+	    config.addAllowedMethod("*");
+	    config.addAllowedHeader("*");
+	    config.setAllowCredentials(true);
 
-        config.setAllowedMethods(List.of(
-                "GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"
-        ));
+	    UrlBasedCorsConfigurationSource source =
+	            new UrlBasedCorsConfigurationSource();
 
-        config.setAllowedHeaders(List.of("*"));
+	    source.registerCorsConfiguration("/**", config);
 
-        config.setExposedHeaders(List.of(
-                "Authorization",
-                "X-Total-Count"
-        ));
-
-        config.setAllowCredentials(true);
-
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", config);
-
-        return source;
-    }
+	    return source;
+	}
 }

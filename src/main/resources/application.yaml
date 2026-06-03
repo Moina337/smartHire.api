@@ -12,21 +12,20 @@ spring:
       ddl-auto: update
     show-sql: true
 
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 12706545451-dmus44v27oj8i3aj61sib5tbf28me16b.apps.googleusercontent.com
+            client-secret: TON_SECRET
+            scope:
+              - email
+              - profile
+
 jwt:
   secret: "dev-secret-key-dev-secret-key-dev-secret-key-dev-secret-key-123456"
   expiration: 86400000
-  
+
 app:
-  file-base-url: http://localhost:8080/uploads  
-  
-  
-  security:
-      oauth2:
-        client:
-          registration:
-            google:
-              client-id: 12706545451-dmus44v27oj8i3aj61sib5tbf28me16b.apps.googleusercontent.com
-              client-secret: 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
-              scope:
-                - email
-                - profile
+  file-base-url: http://localhost:8080/uploads
