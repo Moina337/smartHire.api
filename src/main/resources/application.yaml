@@ -24,7 +24,7 @@ spring:
               - profile
 
 jwt:
-  secret: "dev-secret-key-dev-secret-key-dev-secret-key-dev-secret-key-123456"
+  secret: 
   expiration: 86400000
 
 app:
