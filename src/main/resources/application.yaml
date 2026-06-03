@@ -17,7 +17,7 @@ spring:
       client:
         registration:
           google:
-            client-id: 12706545451-dmus44v27oj8i3aj61sib5tbf28me16b.apps.googleusercontent.com
+            client-id: 
             client-secret: TON_SECRET
             scope:
               - email
