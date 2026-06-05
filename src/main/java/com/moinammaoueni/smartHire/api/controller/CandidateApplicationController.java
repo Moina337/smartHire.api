@@ -32,10 +32,7 @@ public class CandidateApplicationController {
     private final ApplicationService applicationService;
 
     // POST /api/candidate/applications/{jobId}
-    @PostMapping(
-            value = "/{jobId}",
-            consumes = "multipart/form-data"
-    )
+    @PostMapping("/{jobId}")
     public ApplicationResponse postuler(
             @PathVariable Long jobId) {
 

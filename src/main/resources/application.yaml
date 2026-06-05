@@ -17,14 +17,14 @@ spring:
       client:
         registration:
           google:
-            client-id: 
-            client-secret: TON_SECRET
+            client-id: 12706545451-dmus44v27oj8i3aj61sib5tbf28me16b.apps.googleusercontent.com
+            client-secret: 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
             scope:
               - email
               - profile
 
 jwt:
-  secret: 
+  secret: "dev-secret-key-dev-secret-key-dev-secret-key-dev-secret-key-123456"
   expiration: 86400000
 
 app:
