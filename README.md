@@ -28,8 +28,8 @@ Les administrateurs peuvent :
 
 ## 🌐 Démo & Liens
 
-- 🔗 Frontend : https://github.com/ton-user/smarthire.client  
-- 🔗 Backend : https://github.com/ton-user/smartHire.api  
+- 🔗 Frontend : https://github.com/Moina337/smarthire.client  
+- 🔗 Backend : https://github.com/Moina337/smartHire.api 
 - 📘 Swagger API : http://localhost:8080/swagger-ui/index.html 
 
 ## 🛠 Technologies
