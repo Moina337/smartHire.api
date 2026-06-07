@@ -26,6 +26,12 @@ Les administrateurs peuvent :
 
 ---
 
+## 🌐 Démo & Liens
+
+- 🔗 Frontend : https://github.com/ton-user/smarthire.client  
+- 🔗 Backend : https://github.com/ton-user/smartHire.api  
+- 📘 Swagger API : http://localhost:8080/swagger-ui/index.html 
+
 ## 🛠 Technologies
 
 * Java 21
